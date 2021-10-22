@@ -2,12 +2,38 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "buildWin",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "/p:RuntimeIdentifier=win-x64",
+                "${workspaceFolder}/KimiKamera.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "buildLinux",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "/p:RuntimeIdentifier=linux-x64",
+                "${workspaceFolder}/KimiKamera.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/onair-cam.csproj",
+                "${workspaceFolder}/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +45,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/onair-cam.csproj",
+                "${workspaceFolder}/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +58,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/onair-cam.csproj",
+                "${workspaceFolder}/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

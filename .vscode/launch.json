@@ -9,8 +9,14 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/net5.0/KimiKamera.dll",
+            "windows": {
+                "preLaunchTask": "buildWin",
+                "program": "${workspaceFolder}/bin/Debug/net5.0/win-x64/KimiKamera.dll"
+            },
+            "linux": {
+                "preLaunchTask": "buildLinux",
+                "program": "${workspaceFolder}/bin/Debug/net5.0/linux-x64/KimiKamera.dll"
+            },
             "args": ["-bsl 8", "-i 5000"],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
