@@ -11,11 +11,11 @@
             "preLaunchTask": "build",
             "windows": {
                 "preLaunchTask": "buildWin",
-                "program": "${workspaceFolder}/bin/Debug/net5.0/win-x64/KimiKamera.dll"
+                "program": "${workspaceFolder}/src/bin/Debug/net5.0/win-x64/KimiKamera.dll"
             },
             "linux": {
                 "preLaunchTask": "buildLinux",
-                "program": "${workspaceFolder}/bin/Debug/net5.0/linux-x64/KimiKamera.dll"
+                "program": "${workspaceFolder}/src/bin/Debug/net5.0/linux-x64/KimiKamera.dll"
             },
             "args": ["--blinkstickleds=8", "--interval=5001"],
             "cwd": "${workspaceFolder}",

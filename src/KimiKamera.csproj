@@ -9,16 +9,19 @@
     <!-- <LangVersion>10</LangVersion> -->
   </PropertyGroup>
 
+  <Target Name="BS" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProjectDir)..\lib\BlinkStickDotnet.dll')">
+    <Exec Command="dotnet build -r $(RuntimeIdentifier) -o $(ProjectDir)..\lib $(ProjectDir)\..\lib\BlinkStickDotnet\BlinkStickDotnet\BlinkStickDotnet.csproj" />
+  </Target>
+
   <ItemGroup>
-    <PackageReference Include="HidSharp" Version="2.1.0" />
-    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
     <Reference Include="BlinkStickDotNet">
-      <HintPath>lib\BlinkStickDotNet.dll</HintPath>
+      <HintPath>..\lib\BlinkStickDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
+
 </Project>

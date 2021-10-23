@@ -8,20 +8,19 @@
             "args": [
                 "build",
                 "/p:RuntimeIdentifier=win-x64",
-                "${workspaceFolder}/KimiKamera.csproj",
+                "${workspaceFolder}/src/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile"
-        },
-        {
+            "problemMatcher": "$msCompile",
+        },        {
             "label": "buildLinux",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
                 "/p:RuntimeIdentifier=linux-x64",
-                "${workspaceFolder}/KimiKamera.csproj",
+                "${workspaceFolder}/src/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +32,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/KimiKamera.csproj",
+                "${workspaceFolder}/src/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -45,7 +44,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/KimiKamera.csproj",
+                "${workspaceFolder}/src/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -58,7 +57,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/KimiKamera.csproj",
+                "${workspaceFolder}/src/KimiKamera.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
