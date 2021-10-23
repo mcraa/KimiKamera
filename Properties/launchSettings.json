@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "onair_cam": {
+    "KimiKamera": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "environmentVariables": {

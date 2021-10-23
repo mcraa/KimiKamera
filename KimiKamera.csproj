@@ -11,14 +11,12 @@
 
   <ItemGroup>
     <PackageReference Include="HidSharp" Version="2.1.0" />
+    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.1" />
-    <Reference Include="DirectShowLib-2005">
-      <HintPath>lib\DirectShowLib-2005.dll</HintPath>
-    </Reference>
     <Reference Include="BlinkStickDotNet">
       <HintPath>lib\BlinkStickDotNet.dll</HintPath>
     </Reference>

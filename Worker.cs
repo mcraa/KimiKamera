@@ -29,6 +29,7 @@ namespace KimiKamera
             _logger = logger;
             _interval = string.IsNullOrEmpty(args[ArgNames.INTERVAL]) ? 5000 : Int16.Parse(args[ArgNames.INTERVAL]);
             
+            var x = args.GetValue<string>(ArgNames.LEDS_COUNT);
             ParseBLinkStickParams(args[ArgNames.LEDS_COUNT]);
             ParseSignalRParams(args[ArgNames.SIGNALR_URL]);
             
