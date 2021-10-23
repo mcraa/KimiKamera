@@ -13,7 +13,8 @@ The message structure is matching the examples by [dotnet/AspNetCore.Docs](https
 The main goal of this project to tell others around you that your camera is on.
 Enable the `BlinkStick` service with passing the number of leds through the `-bsl` command line parameter.
 
-The service uses the [official library](https://github.com/arvydas/BlinkStickDotNet) from the manufacturer. The built dlls are in the `lib` folder
+The service uses the [official library](https://github.com/arvydas/BlinkStickDotNet) from the manufacturer. The built dlls are in the `lib` folder.
+In case you need to rebuild them do `git submodule update --init` delete the dlls and build the KimiKamera project. If that does not work you can still build manually the `lib/BlinkstickDotNEt/BlinkStickDotNet/BlinkStickDotNet.csproj` and put the new dlls in the `lib` folder
 
 ### What service do you need?
 Pls add an issue or PR
@@ -30,7 +31,7 @@ Pls add an issue or PR
 ### On windows 
 You can install the program as a service with [sc.exe](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/sc-create). Make sure you set it to `Run as Administrator`, querying the camera is not working as a normal user.
 ```
-cd path/to/project
+cd path/to/project/src
 dotnet run -- -bsl 8 -i 2000
 ```
 or

@@ -9,8 +9,11 @@
     <!-- <LangVersion>10</LangVersion> -->
   </PropertyGroup>
 
-  <Target Name="BS" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProjectDir)..\lib\BlinkStickDotnet.dll')">
-    <Exec Command="dotnet build -r $(RuntimeIdentifier) -o $(ProjectDir)..\lib $(ProjectDir)\..\lib\BlinkStickDotnet\BlinkStickDotnet\BlinkStickDotnet.csproj" />
+  <Target Name="BSWin" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProjectDir)..\lib\BlinkStickDotNet.dll') And $(RuntimeIdentifier) =='win-x64'" >
+    <Exec Command="dotnet build -r $(RuntimeIdentifier) -o $(ProjectDir)..\lib $(ProjectDir)..\lib\BlinkStickDotNet\BlinkStickDotNet\BlinkStickDotNet.csproj" />
+  </Target>
+  <Target Name="BSLinux" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProjectDir)..\lib\BlinkStickDotNet.dll') And $(RuntimeIdentifier) =='linux-x64'" >
+    <Exec Command="xbuild /p:OutDir=$(ProjectDir)..\lib\ $(ProjectDir)..\lib\BlinkStickDotNet\BlinkStickDotNet\BlinkStickDotNet.csproj" />
   </Target>
 
   <ItemGroup>
