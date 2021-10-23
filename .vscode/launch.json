@@ -17,7 +17,7 @@
                 "preLaunchTask": "buildLinux",
                 "program": "${workspaceFolder}/bin/Debug/net5.0/linux-x64/KimiKamera.dll"
             },
-            "args": ["-bsl 8", "-i 5000"],
+            "args": ["--blinkstickleds=8", "--interval=5001"],
             "cwd": "${workspaceFolder}",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",

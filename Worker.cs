@@ -29,21 +29,10 @@ namespace KimiKamera
             _logger = logger;
             _interval = string.IsNullOrEmpty(args[ArgNames.INTERVAL]) ? 5000 : Int16.Parse(args[ArgNames.INTERVAL]);
             
-            var x = args.GetValue<string>(ArgNames.LEDS_COUNT);
-            ParseBLinkStickParams(args[ArgNames.LEDS_COUNT]);
+            ParseBLinkStickParams(args[ArgNames.BLINKSTICK_LEDS_COUNT]);
             ParseSignalRParams(args[ArgNames.SIGNALR_URL]);
             
-            _command = commandOverride; 
-
-            // TODO: this gets LibUsbDotnet incorrect format error
-            // _usbMonitor = new UsbMonitor();
-            // _usbMonitor.BlinkStickConnected += (object sender, DeviceModifiedArgs e) => {
-            //     FindDevices();
-            // };
-            // _usbMonitor.BlinkStickDisconnected += (object sender, DeviceModifiedArgs e) => {
-            //     _squareDevices = null;
-            // };
-
+            _command = commandOverride;
         }
 
         private void ParseSignalRParams(string arg)

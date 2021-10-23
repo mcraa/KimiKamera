@@ -27,7 +27,6 @@ namespace KimiKamera
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    // TODO pass parameters to change interval and query
                     services.AddHostedService<Worker>();
                 });
     }

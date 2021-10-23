@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 public class BlinksticService : IStatusNotifier
 {
     private BlinkStick[] _squareDevices;
-
+    //private UsbMonitor _usbMonitor;
     public Boolean HasDevices { get { return _squareDevices != null && _squareDevices.Length > 0; }}
     private List<byte> _ledIndexes = new List<byte>();
 
@@ -17,6 +17,15 @@ public class BlinksticService : IStatusNotifier
         {
             _ledIndexes.Add(i);
         }
+
+        // TODO: this gets LibUsbDotnet incorrect format / HidSharp cant load Platform error
+        // _usbMonitor = new UsbMonitor();
+        // _usbMonitor.BlinkStickConnected += (object sender, DeviceModifiedArgs e) => {
+        //     FindDevices();
+        // };
+        // _usbMonitor.BlinkStickDisconnected += (object sender, DeviceModifiedArgs e) => {
+        //     _squareDevices = null;
+        // };
     }
 
     private void SetLedsToColor(string color) {

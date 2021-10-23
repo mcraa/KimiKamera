@@ -19,11 +19,11 @@ The service uses the [official library](https://github.com/arvydas/BlinkStickDot
 Pls add an issue or PR
 
 ## Command line parameters
-| Handle | Type | Meaning | Example |
+| Switch | Type | Meaning | Example |
 |----------|:------:|:---------:|---|
-| `-i` | number | time in milliseconds between two queries for the camera availability, if not provided defaults to `5000` | `6000`
-| `-bsl` | number | if provided creates BlinkStick service with the given amount of leds | `8`
-| `-surl` | string | if provided creates SignalR connection to the provided url | `http://localhost:5000`
+| `-i`, `--interval` | number | time in milliseconds between two queries for the camera availability, if not provided defaults to `5000` | `6000`
+| `-bsl`, `--blinkstickleds` | number | if provided creates BlinkStick service with the given amount of leds | `8`
+| `-surl`, `--signalrurl` | string | if provided creates SignalR connection to the provided url | `http://localhost:5000`
 
 ## Example usage
 
