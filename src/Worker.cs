@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 
 namespace KimiKamera
@@ -89,9 +90,29 @@ namespace KimiKamera
 
                 try
                 {
+                    var isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+                    var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                    var isOsx = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
                     var cmd = new Process();
-                    cmd.StartInfo = new ProcessStartInfo("cmd", $"/c {_command}");
-                    cmd.StartInfo.RedirectStandardOutput = true;
+
+                    if (isWindows) 
+                    {
+                        cmd.StartInfo = new ProcessStartInfo("cmd", $"/c {_command}");
+                        cmd.StartInfo.RedirectStandardOutput = true;
+                    } 
+                    else if (isLinux) 
+                    {
+                        Console.WriteLine("linx");
+                    }
+                    else if (isOsx)
+                    {
+                        Console.WriteLine("osx");
+                    }
+                    else 
+                    {
+                        _logger.LogError("Unsupported platform", RuntimeInformation.RuntimeIdentifier);
+                        return;
+                    }
 
                     cmd.Start();
 
