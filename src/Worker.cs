@@ -50,7 +50,7 @@ namespace KimiKamera
             } 
             else if (isLinux) 
             {
-                Console.WriteLine("linx");
+                _checker = new LinuxChecker(_logger);
             }
             else if (isOsx)
             {
