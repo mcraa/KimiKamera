@@ -14,7 +14,8 @@ The main goal of this project to tell others around you that your camera is on.
 Enable the `BlinkStick` service with passing the number of leds through the `-bsl` command line parameter.
 
 The service uses the [official library](https://github.com/arvydas/BlinkStickDotNet) from the manufacturer. The built dlls are in the `lib` folder.
-In case you need to rebuild them do `git submodule update --init` delete the dlls and build the KimiKamera project. If that does not work you can still build manually the `lib/BlinkstickDotNEt/BlinkStickDotNet/BlinkStickDotNet.csproj` and put the new dlls in the `lib` folder
+In case you need to rebuild them do `git submodule update --init` delete the dlls and build the KimiKamera project. If that does not work you can still build manually the `lib/BlinkstickDotNEt/BlinkStickDotNet/BlinkStickDotNet.csproj` and put the new dlls in the `lib` folder.
+In the prebuilt dlls the custom `HidSharp` and `LibUsb` implementations are replaced with the nuget equivalents(?). This removes the `UsbMonitor` functionality what was not working by default either (on net5.0 by my testing), but makes Linux compatibility better.
 
 ### What service do you need?
 Pls add an issue or PR
@@ -45,3 +46,4 @@ KimiKamera.exe -bsl 8
 cd path/to/executable
 KimiKamera -bsl 8
 ```
+Tested on Ubuntu 20.04 (VM) and OpenSUSE 15.3.
