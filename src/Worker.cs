@@ -16,27 +16,68 @@ namespace KimiKamera
     {
         private readonly ILogger<Worker> _logger;
         private readonly int _interval;
+        private readonly Boolean _continous = false;
         private Boolean _cameraIsOn = true ;
         private Boolean _cameraIsChanging = true;
         private string _command;        
-        private Dictionary<string, IStatusNotifier> _services = new Dictionary<string, IStatusNotifier>();
+        private ServicesCollection _services = new ServicesCollection();
+        private IOSCameraChecker _checker;
 
         public Worker(
             ILogger<Worker> logger,
             IConfiguration args,
-            string commandOverride = @"wmic process where ""CommandLine like '%-k Camera%' and not CommandLine like '%wmic%'"" get ThreadCount"
+            string commandOverride = null
         )
         {
             _logger = logger;
-            _interval = string.IsNullOrEmpty(args[ArgNames.INTERVAL]) ? 5000 : Int16.Parse(args[ArgNames.INTERVAL]);
-            
-            ParseBLinkStickParams(args[ArgNames.BLINKSTICK_LEDS_COUNT]);
-            ParseSignalRParams(args[ArgNames.SIGNALR_URL]);
+            _interval = ParseIntervalParam(args[ArgNames.INTERVAL]);
+            _continous = ParseContinousParam(args[ArgNames.CONTINOUS]);
+            ParseBLinkStickParam(args[ArgNames.BLINKSTICK_LEDS_COUNT]);
+            ParseSignalRParam(args[ArgNames.SIGNALR_URL]);
             
             _command = commandOverride;
+
+            var isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            var isOsx = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
+            if (isWindows) 
+            {
+                _checker = 
+                    string.IsNullOrEmpty(commandOverride) 
+                    ? new WindowsChecker(_logger) 
+                    : new WindowsChecker(_logger, _command);
+            } 
+            else if (isLinux) 
+            {
+                Console.WriteLine("linx");
+            }
+            else if (isOsx)
+            {
+                Console.WriteLine("osx");
+            }
+            else 
+            {
+                _logger.LogError("Unsupported platform", RuntimeInformation.RuntimeIdentifier);
+                throw new Exception($"Unsupported platform {RuntimeInformation.RuntimeIdentifier}");
+            }
         }
 
-        private void ParseSignalRParams(string arg)
+        #region Params 
+
+        private int ParseIntervalParam(string arg)
+        {
+            if (string.IsNullOrEmpty(arg))
+            {
+                return 5000;
+            } 
+            else
+            {
+                return Int16.Parse(arg);
+            }
+        }
+
+        private void ParseSignalRParam(string arg)
         {
             if (!string.IsNullOrEmpty(arg)) 
             {
@@ -44,7 +85,7 @@ namespace KimiKamera
             }
         }
 
-        private void ParseBLinkStickParams(string arg)
+        private void ParseBLinkStickParam(string arg)
         {
             if (!string.IsNullOrEmpty(arg))
             {
@@ -53,24 +94,18 @@ namespace KimiKamera
             }
         }
 
-        public async Task SendStatuses(StatusEnum status)       
+        private bool ParseContinousParam(string arg) 
         {
-            foreach (var srv in _services)
+            if (!string.IsNullOrEmpty(arg) && string.Equals("true", arg, StringComparison.InvariantCultureIgnoreCase)) 
             {
-                switch (status)
-                {
-                    case StatusEnum.Busy:
-                    await srv.Value.SetBusyAsync();
-                    break;
-                    case StatusEnum.Transition:
-                    await srv.Value.SetInTransitionAsync();
-                    break;
-                    case StatusEnum.Available:
-                    await srv.Value.SetAvailableAsync();
-                    break;
-                }
+                return true;
             }
-        } 
+
+            return false;
+        }
+
+        #endregion
+
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {            
@@ -89,48 +124,17 @@ namespace KimiKamera
                 }
 
                 try
-                {
-                    var isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-                    var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-                    var isOsx = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-                    var cmd = new Process();
+                {                    
+                    var current = await _checker.PollCamerasAsync();
 
-                    if (isWindows) 
+                    // sending status on changing
+                    if (current != StatusEnum.Available)
                     {
-                        cmd.StartInfo = new ProcessStartInfo("cmd", $"/c {_command}");
-                        cmd.StartInfo.RedirectStandardOutput = true;
-                    } 
-                    else if (isLinux) 
-                    {
-                        Console.WriteLine("linx");
-                    }
-                    else if (isOsx)
-                    {
-                        Console.WriteLine("osx");
-                    }
-                    else 
-                    {
-                        _logger.LogError("Unsupported platform", RuntimeInformation.RuntimeIdentifier);
-                        return;
-                    }
-
-                    cmd.Start();
-
-                    var result = await cmd.StandardOutput.ReadToEndAsync();
-                    int count = 0;
-                    _logger.LogInformation(result);
-
-                    if (result.Length > 0 && result[0] == 'T')
-                    {
-                        // Header line should be 'TreadCount'
-                        // Then the value in the first line
-                        count = Int16.Parse(result.Split('\n')[1].Trim());
-
-                        if (count > 10)
+                        if (current == StatusEnum.Busy)
                         {
                             if (!_cameraIsOn) {
                                 _logger.LogInformation("Turning camera ON");
-                                await SendStatuses(StatusEnum.Busy);
+                                await _services.SendStatuses(current);
 
                                 _cameraIsOn = true;
                                 _cameraIsChanging = false;
@@ -140,7 +144,7 @@ namespace KimiKamera
                         {   
                             if (!_cameraIsChanging) {
                                 _logger.LogInformation("Cam changing");
-                                await SendStatuses(StatusEnum.Transition);
+                                await _services.SendStatuses(current);
                                 
                                 _cameraIsChanging = true;
                                 _cameraIsOn = false;
@@ -151,15 +155,15 @@ namespace KimiKamera
                     {
                         if (_cameraIsOn || _cameraIsChanging) {
                             _logger.LogInformation("Turning camera OFF");
-                            await SendStatuses(StatusEnum.Available);
+                            await _services.SendStatuses(current);
                             
                             _cameraIsChanging = false;
                             _cameraIsOn = false;
                         }
                     }
 
-                    await cmd.WaitForExitAsync();
-                    cmd.Dispose();
+                    // sending status every interval
+                    if (_continous) await _services.SendStatuses(current);
 
                 }
                 catch (System.Exception e)
