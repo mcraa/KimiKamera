@@ -13,7 +13,7 @@
     <Exec Command="dotnet build -r $(RuntimeIdentifier) -o $(ProjectDir)..\lib $(ProjectDir)..\lib\BlinkStickDotNet\BlinkStickDotNet\BlinkStickDotNet.csproj" />
   </Target>
   <Target Name="BSLinux" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProjectDir)..\lib\BlinkStickDotNet.dll') And $(RuntimeIdentifier) =='linux-x64'" >
-    <Exec Command="xbuild /p:OutDir=$(ProjectDir)..\lib\ $(ProjectDir)..\lib\BlinkStickDotNet\BlinkStickDotNet\BlinkStickDotNet.csproj" />
+    <Exec Command="xbuild /p:OutDir=$(ProjectDir)../lib/ $(ProjectDir)../lib/BlinkStickDotNet/BlinkStickDotNet/BlinkStickDotNet.csproj" />
   </Target>
 
   <ItemGroup>
